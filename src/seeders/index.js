@@ -6,11 +6,11 @@ const User = require('../models/User');
 const AppointmentStatus = require('../models/AppointmentStatus');
 const Vet = require('../models/Vet');
 const Pet = require('../models/Pet');
+const Category = require('../models/Category');
 require("../models")
 
-const roles = [
-    {name: "admin"}, {name: "vet"}, {name: "client"}
-]
+const categories = [
+    {name: "destacados"}, {name: "viniles"}, {name: "cintas"}, {name: "apliques"}, {name: "descorables"}, {name: "herramientas"}, {name: "herramientas"}]
 const shift = [{name: "Mañana"}, {name: "Tarde"}]
 
 const specialities = [{name: "Medicina interna"}, {name: "Cirugía"}, 
@@ -68,13 +68,14 @@ const pets = [
 // Anfibios (como ranas, sapos, etc.)
 
 async function seedCreate() {
-    await Role.bulkCreate(roles)
-    await Shift.bulkCreate(shift)
-    await Specialty.bulkCreate(specialities)
-    await User.bulkCreate(users);
-    await AppointmentStatus.bulkCreate(appointmentStatus)
-    await Vet.bulkCreate(vets)
-    await Pet.bulkCreate(pets)
+    // await Role.bulkCreate(roles)
+    // await Shift.bulkCreate(shift)
+    // await Specialty.bulkCreate(specialities)
+    // await User.bulkCreate(users);
+    // await AppointmentStatus.bulkCreate(appointmentStatus)
+    // await Vet.bulkCreate(vets)
+    // await Pet.bulkCreate(pets)
+    await Category.bulkCreate(categories)
 }
 
 

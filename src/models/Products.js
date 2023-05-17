@@ -30,11 +30,7 @@ const Products = sequelize.define(
       type: DataTypes.TEXT,
       unique: true,
       allowNull: false,
-    },
-    category_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    }
   },
   {
     timestamps: false,
