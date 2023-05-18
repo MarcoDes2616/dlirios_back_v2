@@ -9,11 +9,10 @@ const { Op } = require('sequelize');
 //ENDPOINT SYSTEM 1 --- LOGIN
 const login = catchError(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ where: { email } }, { include: [Pet] });
+  const user = await User.findOne({ where: { email } });
   if (!user) return res.status(404).json({ message: "user not found" });
   if (!user.isVerified || !user.status) return res.status(401).json({ message: "User no verified or disabled" });
-  // const isValid = await bcrypt.compare(password, user.password);
-  const isValid = password == user.password
+  const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return res.status(401).json({ message: "Invalid credentials" });
   const token = jwt.sign({ user }, process.env.TOKEN_SECRET, {
     expiresIn: "1000h",
@@ -24,6 +23,7 @@ const login = catchError(async (req, res) => {
 //ENDPOINT SYSTEM 2 --- RESET PASSWORD
 const resetPaswwordMail = catchError(async (req, res) => {
   const { email } = req.body;
+  console.log(email);
   const user = await User.findOne({ where: { email } });
   if (!user) return res.status(404).json({ message: "User no found" })
   const tokenToVerify = jwt.sign({ user }, process.env.TOKEN_SECRET, {
@@ -33,7 +33,7 @@ const resetPaswwordMail = catchError(async (req, res) => {
     to: user.email,
     subject: "Reset password",
     html: ` <h3>Estas intentanto recuperar tu contraseña</h3>
-            <a href="${req.body.frontBaseUrl}/reset_password/${tokenToVerify}">Click en el enlace para reset E-mail</a>`
+            <a href="${req.body.frontBaseUrl}/${tokenToVerify}">Click en el enlace para reset E-mail</a>`
   });
   res.json({success: true});
 });

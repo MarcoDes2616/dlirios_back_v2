@@ -49,7 +49,6 @@ User.beforeCreate(async(user) => {
 })
 
 User.afterFind(async(user) => {
-    console.log(user);
     if (user.dataValues) {
         const img = await getImgUrl(user.image)
         user.image = img
