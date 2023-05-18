@@ -2,15 +2,9 @@ const catchError = require("../utils/catchError");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendMail");
-const Pet = require("../models/Pet");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const Vet = require("../models/Vet");
-const Specialty = require("../models/Specialty");
-const TimeAssignment = require("../models/TimeAssignment");
-const Appointment = require("../models/Appointment");
 const { Op } = require('sequelize');
-const { getImgUrl } = require("../middleware/firebase.middleware");
 
 //ENDPOINT SYSTEM 1 --- LOGIN
 const login = catchError(async (req, res) => {

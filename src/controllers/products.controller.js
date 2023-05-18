@@ -4,12 +4,22 @@ const Category = require('../models/Category');
 
 const getAll = catchError(async(req, res) => {
     const {categoryId} = req.query
-    const results = await Products.findAll({
-        where: {categoryId},
-        include: {
-            model: Category,
-            attributes: ["name"]
-    }});
+    let results
+    if (categoryId) {
+        results = await Products.findAll({
+            where: {categoryId},
+            include: {
+                model: Category,
+                attributes: ["name"]
+        }});
+        return res.json(results);
+    }
+        results = await Products.findAll({
+            include: {
+                model: Category,
+                attributes: ["name"]
+        }});
+    
     return res.json(results);
 });
 
