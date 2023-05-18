@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/connection');
 
-const Category = sequelize.define('categories', {
+const Role = sequelize.define('role', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -10,4 +10,4 @@ const Category = sequelize.define('categories', {
     timestamps: false
 });
 
-module.exports = Category;
+module.exports = Role;

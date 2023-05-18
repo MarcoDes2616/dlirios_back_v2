@@ -1,5 +1,7 @@
 const sequelize = require('../utils/connection');
 const Category = require('../models/Category');
+const User = require('../models/User');
+const Role = require('../models/Role');
 require("../models")
 
 const categories = [
@@ -10,9 +12,13 @@ const categories = [
 
 
 
-// const users = [
-//   { firstname: "User1", lastname: 'Cardenas', email: 'john1@example.com', 
-//   password: "12345678", roleId: 3, isVerified: true },
+const users = [
+  { firstname: "Isabel", lastname: 'Urdaneta', email: 'isabelcurdanetam48@gmail.com', 
+  password: "12345678", roleId: 1, isVerified: true }]
+
+const role = [
+  {name: "Admin"}, {name: "Client"},
+]
 //   { firstname: "User2", lastname: 'Cardenas', email: 'john2@example.com', 
 //   password: "12345678", roleId: 3, isVerified: true },
 //   { firstname: "User3", lastname: 'Cardenas', email: 'john3@example.com', 
@@ -31,8 +37,9 @@ const categories = [
 
 
 async function seedCreate() {
-    // await User.bulkCreate(users);
+    await Role.bulkCreate(role)
     await Category.bulkCreate(categories)
+    await User.bulkCreate(users);
 }
 
 
