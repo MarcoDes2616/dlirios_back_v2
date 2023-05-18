@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/connection');
 const bcrypt = require("bcrypt");
 const { getImgUrl } = require('../middleware/firebase.middleware');
-const { types } = require('pg');
 
 const User = sequelize.define('users', {
     firstname: {
@@ -26,11 +25,7 @@ const User = sequelize.define('users', {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    passwordChangeAt: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    profileImgUrl: {
+    image: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -56,14 +51,14 @@ User.beforeCreate(async(user) => {
 User.afterFind(async(user) => {
     console.log(user);
     if (user.dataValues) {
-        const img = await getImgUrl(user.profileImgUrl)
-        user.profileImgUrl = img
+        const img = await getImgUrl(user.image)
+        user.image = img
         return
     }
     const urls = user.map(async(item) => {
-        if(item.profileImgUrl){
-            const img = await getImgUrl(item.profileImgUrl)
-            item.profileImgUrl = img
+        if(item.image){
+            const img = await getImgUrl(item.image)
+            item.image = img
         }
     })
     await Promise.all(urls) // map async

@@ -46,7 +46,7 @@ const updatePassword = catchError(async (req, res) => {
   const data = jwt.verify(token, process.env.TOKEN_SECRET);
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   await User.update(
-    { password: hashedPassword, resetCode: null },
+    { password: hashedPassword, resetCode: null,  },
     { where: { id: data.user.id } }
   );
   res.status(201).json({ success: true });
