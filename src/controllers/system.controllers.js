@@ -96,115 +96,6 @@ const getMe = catchError(async (req, res) => {
   res.json(user);
 });
 
-// ENDPOINT DEL SISTEMA 9 --- OBTENER LISTADO DE PETS
-const getAllPets = catchError(async (req, res) => {
-  const results = await Pet.findAll({ include: [User] });
-  return res.json(results);
-});
-
-// ENDPOINT DEL SISTEMA 10 --- OBTENER UN PET
-const getOnePet = catchError(async (req, res) => {
-  const { id } = req.params;
-  const result = await Pet.findByPk(id, { include: [User] });
-  if (!result) return res.sendStatus(404);
-  return res.json(result);
-});
-
-// ENDPOINT DEL SISTEMA 11 --- REGISTRO RAPIDO DE USUARIO Y MASCOTA
-const registerUserPet = catchError(async (req, res) => {
-  const { firstname, lastname, email, name, specie, race, frontBaseUrl } =
-    req.body;
-  const password = require("crypto").randomBytes(10).toString("hex");
-  const user = await User.create({
-    firstname,
-    lastname,
-    email,
-    password,
-    roleId: 3,
-  });
-  await Pet.create({ name, specie, race, userId: user.id });
-  const tokenToVerify = jwt.sign({ user }, process.env.TOKEN_SECRET, {
-    expiresIn: "24h",
-  });
-  await sendEmail({
-    to: user.email,
-    subject: "Verificación de Email",
-    html: `
-    <p>Su visita al centro clinico veterinario generó un registro automatico en nuestro sistema</p>
-    <p>Le damos la mas cordial bienvenida</p>
-    <a href="${frontBaseUrl}/verify_email/${tokenToVerify}">Click en el enlace para verificar E-mail</a>
-    <p>Posterior a la verificacion de su email, podrá ingresar con las sigueintes credenciales</p>
-    <ul>
-      <li>Email: ${email}</li>
-      <li>Contraseña: ${password}</li>
-    </ul>
-    `,
-  });
-  return res.status(201).json({success: true})
-});
-
-// ENDPOINT DEL SISTEMA 12 --- GET SPECIALTY
-const getSpecialty = catchError( async(req, res) => {
-  const specialty = await Specialty.findAll()
-  return res.json(specialty);
-})
-
-
-// ENDPOINT DEL SISTEMA 13 --- REGISTRO RAPIDO DE VETERINARIOS
-const registerVet = catchError(async (req, res) => {
-  const { firstname, lastname, email, specialty, frontBaseUrl } = req.body;
-  const password = require("crypto").randomBytes(10).toString("hex");
-  const user = await User.create({ firstname, lastname, email, password, roleId: 2});
-  await Vet.create({userId: user.id, specialty});
-  const tokenToVerify = jwt.sign({ user }, process.env.TOKEN_SECRET, {expiresIn: "24h"});
-  await sendEmail({
-    to: user.email,
-    subject: "Verificación de Email",
-    html: ` <p>Le damos la mas cordial bienvenida</p>
-      <a href="${frontBaseUrl}/verify_email/${tokenToVerify}">Click en el enlace para verificar E-mail</a>
-      <p>Posterior a la verificacion de su email, podrá ingresar con las sigueintes credenciales</p>
-      <ul>
-        <li>Email: ${email}</li>
-        <li>Contraseña: ${password}</li>
-      </ul>
-      ` });
-  return res.status(201).json(user);
-});
-
-// ENDPOINT DEL SISTEMA 14 --- GET TODOS LOS VET
-const getAllVet = catchError( async(req, res) => {
-  const vets = await User.findAll({
-      where: {roleId: 2}, 
-      include: {
-        model: Vet,
-        include: [Specialty, TimeAssignment, Appointment]
-      }
-    })
-  res.json(vets)
-})
-
-//ENDPOINT DEL SISTEMA 15 --- GET APPOINTMENT
-const getOneVet = catchError(async (req, res) => {
-  const { id } = req.params;
-  const result = await User.findByPk(id, { 
-    include: {
-      model: Vet,
-      include: [Specialty, TimeAssignment, Appointment]
-    }});
-  if (!result) return res.sendStatus(404);
-  return res.json(result);
-});
-
-
-//ENDPOINT DEL SISTEMA 16 --- GET APPOINTMENT
-const getAppointment = catchError(async(req, res) => {
-  const result = await Appointment.findAll({
-    where: {
-      date: { [Op.gte]: new Date() }
-    }})
-  return res.json(result)
-})
-
 // ENDPOINT DEL SISTEMA 18 --- SOLICITUD PARA VERIFICAR EMAIL
 const requestEmailVerification = catchError(async (req, res) => {
   const { email, frontBaseUrl } = req.body;
@@ -232,13 +123,5 @@ module.exports = {
   getOne,
   enableOrDisableUser,
   getMe,
-  getAllPets,
-  getOnePet,
-  registerUserPet,
-  getSpecialty,
-  registerVet,
-  getAllVet,
-  getOneVet,
-  getAppointment,
   requestEmailVerification
 };

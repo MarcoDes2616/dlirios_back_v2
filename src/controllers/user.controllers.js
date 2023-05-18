@@ -12,7 +12,6 @@ const create = catchError(async (req, res) => {
   const tokenToVerify = jwt.sign({ result }, process.env.TOKEN_SECRET, {
     expiresIn: "24h",
   });
-  // se verificó la funcionalidad.. desactivado mientars se desarrolla
   await sendEmail({
     to: result.email,
     subject: "Verificación de Email",
