@@ -50,9 +50,12 @@ User.beforeCreate(async(user) => {
 
 User.afterFind(async(user) => {
     if (user.dataValues) {
-        const img = await getImgUrl(user.image)
-        user.image = img
-        return
+        if (user.dataValues.image) {
+            const img = await getImgUrl(user.image)
+            user.image = img
+            return user
+        }
+        return user
     }
     const urls = user.map(async(item) => {
         if(item.image){

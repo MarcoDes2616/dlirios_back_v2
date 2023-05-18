@@ -85,8 +85,8 @@ const enableOrDisableUser = catchError(async (req, res) => {
 // ENDPOINT DEL SISTEMA 8 --- OBTENER USUARIO LOGUEADO
 const getMe = catchError(async (req, res) => {
   const { id } = req.user;
-  const user = User.findByPk(id, { include: [Pet] });
-  if (!user.status) return res.status(401).json({ message: "Unauthorized" });
+  const user = await User.findByPk(id);
+  if (!user.status){return res.status(401).json({ message: "Unauthorized" });}
   res.json(user);
 });
 
