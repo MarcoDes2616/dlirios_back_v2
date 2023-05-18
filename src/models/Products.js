@@ -1,14 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connection");
+const { getImgUrl } = require("../middleware/firebase.middleware");
 
-const Products = sequelize.define(
-  "products",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
+const Products = sequelize.define( "products", {
     name: {
       type: DataTypes.STRING(30),
       allowNull: false,

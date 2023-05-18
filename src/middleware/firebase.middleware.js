@@ -3,9 +3,9 @@ const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 
 const firebaseFile = async(req, res, next) => {
     try {
-        const imgRef = ref(storage, `users/${Date.now()}-${req.file.originalname}`);
+        const imgRef = ref(storage, `products/${Date.now()}-${req.file.originalname}`);
         const imgUploaded = await uploadBytes(imgRef, req.file.buffer);
-        req.body.profileImgUrl =  imgUploaded.metadata.fullPath
+        req.body.image =  imgUploaded.metadata.fullPath
         next()
     } catch (error) {
         next(error)
