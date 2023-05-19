@@ -15,7 +15,7 @@ const login = catchError(async (req, res) => {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return res.status(401).json({ message: "Invalid credentials" });
   const token = jwt.sign({ user }, process.env.TOKEN_SECRET, {
-    expiresIn: "1000h",
+    expiresIn: "30d",
   });
   res.json({ user, token });
 });
@@ -76,6 +76,7 @@ const getOne = catchError(async (req, res) => {
 
 // ENDPOINT DEL SISTEMA 7 --- ACTIVAR O DESACTIVAR USUARIOS
 const enableOrDisableUser = catchError(async (req, res) => {
+  console.log("llegué al controlador");
   const { id } = req.params;
   const user = await User.findByPk(id);
   await User.update({ status: !user.status }, { where: { id } });
